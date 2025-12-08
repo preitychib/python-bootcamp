@@ -1,3 +1,4 @@
+# ====== Exception Handling ======
 
 '''
 Write a Python program that attempts to divide two numbers a = 10  b = 0
