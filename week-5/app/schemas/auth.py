@@ -25,3 +25,10 @@ class UserInDB(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ForgotPasswordResponse(BaseModel):
+    reset_token: str
+    message: str = "Mock reset token generated (no email sent)"

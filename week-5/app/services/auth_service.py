@@ -1,4 +1,5 @@
 from datetime import timedelta
+from uuid import UUID, uuid4
 
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -52,3 +53,20 @@ class AuthService:
             access_token=access_token,
             token_type="bearer",
         )
+    
+    async def forgot_password(self, email: str) -> str:
+        """
+        Mock flow for forgot password.
+        """
+        user = await self.user_repo.get_by_email(email)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="User with this email does not exist",
+            )
+
+        reset_token = str(uuid4())
+        # note: reset password functionality is yet not implemented
+        # In a real implementation, this would store the token and send an email
+        # For now, we just return the token as a mock
+        return reset_token
