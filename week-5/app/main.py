@@ -1,9 +1,13 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api import auth, health
 from app.core.config import settings
-from app.api import auth
+from app.core.database import Base, engine
 from app.core.lifespan import lifespan
+
 
 def create_application(create_tables: bool = False) -> FastAPI:
     app = FastAPI(
@@ -24,12 +28,14 @@ def create_application(create_tables: bool = False) -> FastAPI:
         allow_headers=["*"],
     )
 
+    app.include_router(health.router)
     app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["auth"])
     
     return app
 
-app = create_application()
+app = create_application(create_tables=True)
+
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, log_level="info", workers=1, access_log=True, use_colors=True)

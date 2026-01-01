@@ -1,0 +1,118 @@
+[tool.black]
+line-length = 88
+target-version = ['py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.venv
+  | venv
+  | build
+  | dist
+  | migrations
+  | .venv
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+skip = [
+    ".git",
+    "migrations",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".venv",
+    "venv",
+    "build",
+    "dist"
+]
+
+[tool.flake8]
+max-line-length = 88
+extend-ignore = "E203, E501, W503"
+exclude = [
+    ".git",
+    "migrations",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".venv",
+    "venv",
+    "build",
+    "dist"
+]
+max-complexity = 10
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # mccabe complexity
+    "B",  # bugbear
+]
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_return_any = true
+warn_unreachable = true
+
+[[tool.mypy.overrides]]
+module = [
+    "alembic.*",
+    "pydantic.*",
+    "sqlalchemy.*",
+]
+ignore_missing_imports = true
+
+disallow_untyped_defs = false
+
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+asyncio_mode = "auto"
+addopts = "-v --cov=app --cov-report=term-missing"
+
+[coverage.run]
+source = ["app"]
+omit = [
+    "app/migrations/*",
+    "app/tests/*",
+    "app/__pycache__/*"
+]
+
+[coverage.report]
+show_missing = true
+skip_covered = true
+fail_under = 80
+
+tool.ruff.lint.select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "C",  # mccabe complexity
+    "B",  # bugbear
+]

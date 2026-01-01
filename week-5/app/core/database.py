@@ -1,24 +1,25 @@
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker, declarative_base
+from typing import AsyncGenerator, cast
+
+from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
+                                    create_async_engine)
+from sqlalchemy.orm import declarative_base
+
 from .config import settings
 
+DATABASE_URI = cast(str, settings.DATABASE_URI)
 engine = create_async_engine(
-    settings.DATABASE_URI,
+    DATABASE_URI,
     echo=True,
-    future=True,
 )
 
-async_session = sessionmaker(
-    engine, 
-    class_=AsyncSession,
+async_session = async_sessionmaker(
+    engine,
     expire_on_commit=False,
-    autocommit=False,
-    autoflush=False,
 )
 
 Base = declarative_base()
 
-async def get_db() -> AsyncSession:
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     async with async_session() as session:
         try:
             yield session
@@ -26,5 +27,4 @@ async def get_db() -> AsyncSession:
         except Exception:
             await session.rollback()
             raise
-        finally:
-            await session.close()
+
