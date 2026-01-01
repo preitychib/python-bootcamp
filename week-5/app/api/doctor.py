@@ -13,8 +13,12 @@ from app.services.doctor_service import DoctorService
 
 router = APIRouter()
 
+
 @router.get("/", response_model=List[DoctorBase])
-async def list_doctors(db: AsyncSession = Depends(get_db)):
+async def list_doctors(
+    db: AsyncSession = Depends(get_db), 
+    current_user = Depends(get_current_active_user)
+):
     service = DoctorService(db)
     return await service.list_doctors()
 
@@ -22,7 +26,8 @@ async def list_doctors(db: AsyncSession = Depends(get_db)):
 @router.get("/{doctor_id}/availability", response_model=List[DoctorAvailability])
 async def doctor_availability(
     doctor_id: UUID,
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
+    current_user = Depends(get_current_active_user)
 ):
     service = DoctorService(db)
     availability = await service.get_availability(doctor_id)
