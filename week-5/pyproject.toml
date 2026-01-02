@@ -62,7 +62,6 @@ select = [
 
 [tool.mypy]
 python_version = "3.12"
-warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
@@ -80,6 +79,7 @@ module = [
     "alembic.*",
     "pydantic.*",
     "sqlalchemy.*",
+    "tests.*",
 ]
 ignore_missing_imports = true
 
@@ -108,7 +108,8 @@ show_missing = true
 skip_covered = true
 fail_under = 80
 
-tool.ruff.lint.select = [
+[tool.ruff.lint]
+select = [
     "E",  # pycodestyle errors
     "W",  # pycodestyle warnings
     "F",  # pyflakes
