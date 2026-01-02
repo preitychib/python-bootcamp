@@ -18,6 +18,20 @@
    # Start the services
    docker-compose up -d
 
+   # View logs
+   docker-compose logs -f
+   
+   # Stop services
+   docker-compose down
+   
+   # Test case execution
+   # run this first to collect all the test cases
+   pytest --collect-only
+   
+   # run actual tests
+   pytest
+
+
 
 ## Authentication Flow and RBAC Design
 
